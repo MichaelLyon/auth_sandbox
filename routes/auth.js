@@ -7,10 +7,11 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/signin', function(req, res, next) {
-
-
-      res.render("auth/signin", {button_text: "sign in"});
-
+  if (req.signedCookies.user){
+    res.render("auth/yougood");
+  } else {
+    res.render("auth/signin", {button_text: "sign in"});
+  }
 });
 
 router.get('/signout', function(req, res, next) {

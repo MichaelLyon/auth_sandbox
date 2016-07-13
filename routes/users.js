@@ -9,13 +9,16 @@ function Users(){
 }
 
 router.post('/', function(req, res, next) {
+  var crypted = bcrypt.hashSync(req.body.password, 8);
+
   Users().insert(req.body).then(function(val){
+    res.cookie("user", req.body.email, {signed: true});
     res.redirect("/tickets");
   });
 });
 
 router.post('/login', function(req, res, next) {
-  req.
+  
     Users().where({email: req.body.email, password: req.body.password}).first().then(function(found){
        if (found){
          res.redirect("/tickets");

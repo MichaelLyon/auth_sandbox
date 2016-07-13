@@ -18,10 +18,17 @@ router.post('/', function(req, res, next) {
 });
 
 router.post('/login', function(req, res, next) {
-  
+
     Users().where({email: req.body.email, password: req.body.password}).first().then(function(found){
        if (found){
-         res.redirect("/tickets");
+
+         found_user_password = found.rows[0].password;
+         if(bcrypt.compareSync(req.body.password, found_user_password)){
+           res.cookie('user', req.body.password, {signed: true});
+           res.redirect("/tickets");
+         }else{
+           res.redirect("/no_auth");
+         }
        } else {
          res.redirect("/no_auth");
        }
